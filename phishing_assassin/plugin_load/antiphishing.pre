@@ -1,0 +1,1 @@
+loadplugin Mail::SpamAssassin::Plugin::AntiPhishing /etc/mail/spamassassin/AntiPhishing.pm

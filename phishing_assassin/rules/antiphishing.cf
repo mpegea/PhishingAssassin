@@ -1,0 +1,7 @@
+body HREF_INSPECTOR eval:href_inspector()
+describe HREF_INSPECTOR Checks if the HTML href anchor links to the same URL.
+score HREF_INSPECTOR 100
+
+body SSL_CHECKER eval:ssl_checker()
+describe SSL_CHECKER Checks if a html link redirects to a web page with a valid SSL certificate.
+score SSL_CHECKER 200
