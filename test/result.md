@@ -7,14 +7,14 @@
 | **False** | 0  | 7 | 7 |
 | **Accuracy** |  _100%_ |  _36.3636%_ | _42.8571%_ |
 ### Batting Average
-> BA<hitrate,strikerate> = <0.222222, 0>
+- _BA<hitrate,strikerate>_ = <0.222222, 0>
 ### Precision
-> precision = 1
+- _precision_ = 1
 ### Recall
-> recall = 0.222222
+- _recall_ = 0.222222
 ### f-score
-> f-score = 0.363636
+- _f-score_ = 0.363636
 ### Total Cost Ratio
-> (Mark)     TCR = 1.28571
-> (Classify) TCR = 1.28571
-> (Delete)   TCR = 1.28571
+- (Mark)     _TCR_ = 1.28571
+- (Classify) _TCR_ = 1.28571
+- (Delete)   _TCR_ = 1.28571

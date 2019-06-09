@@ -60,19 +60,15 @@ END {
     print "| **False** | " false_positive "  | " false_negative " | " total_false " |" >> "/root/result.md"
     print "| **Accuracy** |  _" positive_accuracy "%_ |  _" negative_accuracy "%_ | _" total_accuracy "%_ |" >> "/root/result.md"
     print "### Batting Average" >> "/root/result.md"
-    print "> BA<hitrate,strikerate> = <" hitrate ", " strikerate ">" >> "/root/result.md"
+    print "- _BA<hitrate,strikerate>_ = <" hitrate ", " strikerate ">" >> "/root/result.md"
     print "### Precision" >> "/root/result.md"
-    print "> precision = " precision >> "/root/result.md"
+    print "- _precision_ = " precision >> "/root/result.md"
     print "### Recall" >> "/root/result.md"
-    print "> recall = " recall >> "/root/result.md"
+    print "- _recall_ = " recall >> "/root/result.md"
     print "### f-score" >> "/root/result.md"
-    print "> f-score = " fscore >> "/root/result.md"
+    print "- _f-score_ = " fscore >> "/root/result.md"
     print "### Total Cost Ratio" >> "/root/result.md"
-    print "> (Mark)     TCR = " tcr_mark >> "/root/result.md"
-    print "> (Classify) TCR = " tcr_classify >> "/root/result.md"
-    print "> (Delete)   TCR = " tcr_delete >> "/root/result.md"
-
-
-
-
+    print "- (Mark)     _TCR_ = " tcr_mark >> "/root/result.md"
+    print "- (Classify) _TCR_ = " tcr_classify >> "/root/result.md"
+    print "- (Delete)   _TCR_ = " tcr_delete >> "/root/result.md"
 }
