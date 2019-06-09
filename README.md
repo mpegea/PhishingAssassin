@@ -27,7 +27,7 @@ docker image build --tag test ./test/
 ***
 ## 2 - Create a new network
 ```
-docker network create --subnet=10.0.0.0/24 test_network
+docker network create --subnet=10.0.0.0/24 phishing_test_network
 ```
 ***
 ## 3 - Container deployment

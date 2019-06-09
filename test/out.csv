@@ -1,13 +1,14 @@
-/root/dataset/__ham__/2.eml,0,0,0
-/root/dataset/__phishing__/3.eml,0,0,1
+file, score, result, expected
 /root/dataset/__ham__/1.eml,0,0,0
-/root/dataset/__phishing__/4.eml,0,0,1
+/root/dataset/__ham__/2.eml,0,0,0
 /root/dataset/__ham__/esto es un test ham.eml,0,0,0
+/root/dataset/__phishing__/Nuevo Sistema de Seguridad Banco Santander..eml,0,0,1
+/root/dataset/__phishing__/Fwd_ Trust me Perfect Vision in just 7 Days!.eml,0,0,1
+/root/dataset/__phishing__/Your account has been limited until we hear from you.eml,0,0,1
+/root/dataset/__phishing__/[Posible SPAM] Noticia de BBVA - Confirmar transferencia !!!.eml,0,0,1
 /root/dataset/__ham__/3.eml,0,0,0
-/root/dataset/__phishing__/1.eml,0,0,1
-/root/dataset/__phishing__/0.eml,0,0,1
-/root/dataset/__phishing__/5.eml,0,0,1
-/root/dataset/__phishing__/2.eml,0,0,1
-/root/dataset/__phishing__/6.eml,0,0,1
-/root/dataset/__phishing__/7.eml,100,1,1
-/root/dataset/__phishing__/8.eml,300,1,1
+/root/dataset/__phishing__/[Posible SPAM] This is my final warning moncho.mendez@uvigo.es!.eml,0,0,1
+/root/dataset/__phishing__/Última advertencia.eml,0,0,1
+/root/dataset/__phishing__/Actualice su cuota de buzón.eml,0,0,1
+/root/dataset/__phishing__/fake_href.eml,100,1,1
+/root/dataset/__phishing__/no_ssl.eml,300,1,1
