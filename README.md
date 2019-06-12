@@ -16,6 +16,9 @@ cp /path/to/your/dataset ./test/dataset/__phishing__
 ```
 >_Note: Some email examples are given. You can remove them._
 ## 1 - Build Docker Images
+
+-> MODIFY CLIENT_IP IN PHISHING_ASSASSIN DOCKERFILE!!
+
 ### 1.1 - PhishingAssassin
 ```
 docker image build --tag phishing_assassin ./phishing_assassin/
@@ -40,6 +43,9 @@ docker container run \
     --ip 10.0.0.10 \
     phishing_assassin
 ```    
+En caso de que no se utilice en localhost: CREAR APARTADO PARA EJECUCIÓN CLIENTE-SERVIDOR EN DISTINTOS HOSTS
+--network host
+
 ### 3.2 - Test
 ```
 docker container run \

@@ -41,4 +41,4 @@ COPY ./plugin_load/antiphishing.pre /etc/mail/spamassassin
 EXPOSE 783/tcp
 
 ## --- Execute on start --- ##
-ENTRYPOINT spamd --listen-ip=10.0.0.10 --port=783 --allowed-ips=10.0.0.5 --debug
+ENTRYPOINT spamd --listen-ip=0.0.0.0 --port=783 --allowed-ips=CLIENT_IP --debug

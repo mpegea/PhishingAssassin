@@ -1,8 +1,10 @@
 #!/bin/bash
 
-# Code executed by each test request, that ends writing its own result into a csv file
+SERVER=SERVER_IP
+
+# Code executed by each test request, that ends writing its own result into a csv file line
 function test_request {
-    FULL_RESULT=$(spamc --full -d phishing_assassin -p 783 < $1)
+    FULL_RESULT=$(spamc --full -d $SERVER -p 783 < $1)
 	SCORE=$(echo $FULL_RESULT | cut -d'/' -f1)
 	SCORE=${SCORE%.*}
 	if [ $SCORE -gt 5 ]
@@ -26,7 +28,7 @@ cat /root/ascii_art.txt
 SIZE="$(find /root/dataset/ -name *.eml | wc -l)"
 echo -e "*********************************\n"
 echo -e " Dataset Size: $SIZE [emails]\n"
-echo -e " Analysis Server: (Convertir en Dinámico!)\n"
+echo -e " Analysis Server: $SERVER\n"
 echo -e "*********************************\n"
 
 
