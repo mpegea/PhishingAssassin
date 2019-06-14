@@ -15,6 +15,11 @@ _Then, the results are statistically analyzed._
 
 
 # Usage Instructions
+## Download
+```
+apt-get install git
+git clone https://github.com/mpegea/PhishingAssassin.git
+```
 
 ## Configuration
 ### Change working directory to PhishingAssassin's main folder.
@@ -51,7 +56,7 @@ Modify the value of the SERVER variable in ./test/run_test.sh
 
 ### PhishingAssassin 
 ```
-docker image build --build-arg ALLOWED_CLIENT_IPS=10. --tag phishing_assassin ./phishing_assassin/
+docker image build --build-arg ALLOWED_CLIENT_IPS=<your_client_IPs> --tag phishing_assassin ./phishing_assassin/
 ```
 >_Note: You must configure the ALLOWED_CLIENT_IPS argument according to Spamd configuration._<br/>
 https://spamassassin.apache.org/full/3.2.x/doc/spamd.html
@@ -95,7 +100,7 @@ docker container run \
 
 ***
 
-## Multi-Host Deployment
+## Dual-Host Deployment
 ### PhishingAssassin
 ```
 docker container run \
@@ -115,13 +120,57 @@ docker container run \
     --mount type=bind,source="$(pwd)"/test/result.md,target=/root/result.md \
     test
 ```
->_Note: Once the container is deployed, if you want to launch the test again, you must use the next command:_
+>_Note: Once the container is deployed, if you want to launch the test again, you must use the next command_
 ```
 docker container start --attach test
 ```
 
 ***
 
+## Swarm Cluster Deployment
+First, all the nodes must  be configurated (each one according to its kind) to allow Docker Swarm networking.
+### Manager Node Firewall Configuration
+```
+apt-get install iptables-persistent
+iptables -A INPUT -p tcp --dport 22 -j ACCEPT
+iptables -A INPUT -p tcp --dport 2376 -j ACCEPT
+iptables -A INPUT -p tcp --dport 2377 -j ACCEPT
+iptables -A INPUT -p tcp --dport 7946 -j ACCEPT
+iptables -A INPUT -p udp --dport 7946 -j ACCEPT
+iptables -A INPUT -p udp --dport 4789 -j ACCEPT
+netfilter-persistent save
+systemctl restart docker
+```
+### Worker Nodes Firewall Configuration
+```
+apt-get install iptables-persistent
+iptables -A INPUT -p tcp --dport 22 -j ACCEPT
+iptables -A INPUT -p tcp --dport 2376 -j ACCEPT
+iptables -A INPUT -p tcp --dport 7946 -j ACCEPT
+iptables -A INPUT -p udp --dport 7946 -j ACCEPT
+iptables -A INPUT -p udp --dport 4789 -j ACCEPT
+netfilter-persistent save
+sudo systemctl restart docker
+```
+
+### Initialize the Swarm mode in the Manager Node
+Run in the node that you want to set as the Swarm Manager.
+```
+docker swarm init --advertise-addr <manager_IP>
+```
+>_Note: The past command will produce the a personalized output for your cluster configuration. The command showed, will be necessary for the next step_
+### Add Worker Nodes to the Swarm
+Run in each node that you want to add as a Swarm Worker.
+```
+docker swarm join --token <y0vrT0Ken> <manager_IP>:<port>
+```
+### Deploying a Service in the Swarm
+```
+docker service create --replicas <number_of_replicas> --name phishing_assassin phishing_assassin
+```
+>_Note: You must have phishing_assassin image build in all nodes, or use your own image registry_
+
+***
 
 ## Check results
 Test results are wrote in `out.csv` for an easy post-analisys processing.
@@ -136,13 +185,17 @@ Also, the file `result.md` contains an statistical analysis from the results obt
 
 ## Optional - Clean the Environment
 ```
+docker service rm phishing_assassin
+```
+>_Note: The past command is only necessary in a Swarm Cluster Deployment. It must be executed in the Manager Node_
+```
 docker container rm -f phishing_assassin test
 ```
 ```
 docker image rm -f phishing_assassin test
 ```
 ```
-docker network rm test_network (Only necessary in Single-Host Deployment)
+docker network rm test_network
 ```
 >_Note: The past command is only necessary in a Single-Host Deployment._
 ```
