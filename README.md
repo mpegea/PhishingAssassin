@@ -1,40 +1,75 @@
 # PhishingAssassin
-_Usage Instructions_
+_PhishingAssassin is an open source tool intended to ease the design of anti-phishing filters. It is based in the well known spam filter SpamAssassin._
+
+_It's formed by two Docker images that works following a Client-Server architecture. It can be deployed both Client and Server in a single Host or in multiple Hosts._
+
+_The SpamAssassin framework it's used to launch rules and plugin filters implemented by the user through an entire email dataset. By default, SpamAssassin won't have any anti-spam filters, because this tool is focused into fighting against phishing._
+
+_You have to insert your own anti-phishing filters and a mail dataset to be analyzed._
+
+_Then, the results are statistically analyzed._
+
+
+***
 ***
 
-## 0 - Dataset Configuration
-### 0.1 - Change working directory to PhishingAssassin's main folder.
+
+# Usage Instructions
+
+## Configuration
+### Change working directory to PhishingAssassin's main folder.
 ```
 cd /your/path/to/PhishingAssassin
 ```
-### 0.2 - Move or copy Dataset Files to be analyzed to each correspondant folder by its type.
+### Move or copy Dataset Files to be analyzed to each correspondant folder by its type.
 ```
-cp /path/to/your/dataset ./test/dataset/__ham__
+cp /path/to/your/ham/dataset ./test/dataset/__ham__
 ```
 ```
-cp /path/to/your/dataset ./test/dataset/__phishing__
+cp /path/to/your/phishing/dataset ./test/dataset/__phishing__
 ```
 >_Note: Some email examples are given. You can remove them._
-## 1 - Build Docker Images
 
--> MODIFY CLIENT_IP IN PHISHING_ASSASSIN DOCKERFILE!!
 
-### 1.1 - PhishingAssassin
+### Insert anti-phishing rules and plugins.
+
+Plugin Load -> `./phishing_assassin/plugin_load/`<br/>
+Plugins -> `./phishing_assassin/plugins/`<br/>
+Rules -> `./phishing_assassin/rules/`
+>_Note: Some filter examples are given. You can remove them._
+
+
+
+### Select your Analysis Server
 ```
-docker image build --tag phishing_assassin ./phishing_assassin/
+Modify the value of the SERVER variable in ./test/run_test.sh
+``` 
+
+
+
+## Build Docker Images
+
+### PhishingAssassin 
 ```
-### 1.2 - Test
+docker image build --build-arg ALLOWED_CLIENT_IPS=10. --tag phishing_assassin ./phishing_assassin/
+```
+>_Note: You must configure the ALLOWED_CLIENT_IPS argument according to Spamd configuration._<br/>
+https://spamassassin.apache.org/full/3.2.x/doc/spamd.html
+
+### Test
 ```
 docker image build --tag test ./test/
 ```
+
 ***
-## 2 - Create a new network
+
+## Single-Host Deployment
+### Create a new Docker network
 ```
 docker network create --subnet=10.0.0.0/24 phishing_test_network
 ```
-***
-## 3 - Container deployment
-### 3.1 - PhishingAssassin
+
+### PhishingAssassin
 ```
 docker container run \
     --name phishing_assassin \
@@ -43,10 +78,7 @@ docker container run \
     --ip 10.0.0.10 \
     phishing_assassin
 ```    
-En caso de que no se utilice en localhost: CREAR APARTADO PARA EJECUCIÓN CLIENTE-SERVIDOR EN DISTINTOS HOSTS
---network host
-
-### 3.2 - Test
+### Test
 ```
 docker container run \
     --name test \
@@ -60,22 +92,49 @@ docker container run \
     --mount type=bind,source="$(pwd)"/test/result.md,target=/root/result.md \
     test
 ```
->_Note: Once the container is deployed, if you want to launch the test again, you must use this command:_
+
+***
+
+## Multi-Host Deployment
+### PhishingAssassin
+```
+docker container run \
+    --name phishing_assassin \
+    --network host
+    phishing_assassin
+```
+
+### Test
+```
+docker container run \
+    --name test \
+    --mount type=bind,source="$(pwd)"/test/dataset,target=/root/dataset,readonly \
+    --mount type=bind,source="$(pwd)"/test/run_test.sh,target=/root/run_test.sh \
+    --mount type=bind,source="$(pwd)"/test/check_results.awk,target=/root/check_results.awk \
+    --mount type=bind,source="$(pwd)"/test/out.csv,target=/root/out.csv \
+    --mount type=bind,source="$(pwd)"/test/result.md,target=/root/result.md \
+    test
+```
+>_Note: Once the container is deployed, if you want to launch the test again, you must use the next command:_
 ```
 docker container start --attach test
 ```
+
 ***
-## 4 - Check results
+
+
+## Check results
 Test results are wrote in `out.csv` for an easy post-analisys processing.
 Also, the file `result.md` contains an statistical analysis from the results obtained. 
 >_Note: You must use a Markdown file reader to view `result.md` with the intended format._
+
+
+***
 ***
 ***
 
+
 ## Optional - Clean the Environment
-```
-rm -rf /your/path/to/PhishingAssassin
-```
 ```
 docker container rm -f phishing_assassin test
 ```
@@ -83,5 +142,9 @@ docker container rm -f phishing_assassin test
 docker image rm -f phishing_assassin test
 ```
 ```
-docker network rm test_network
+docker network rm test_network (Only necessary in Single-Host Deployment)
+```
+>_Note: The past command is only necessary in a Single-Host Deployment._
+```
+rm -rf /your/path/to/PhishingAssassin
 ```

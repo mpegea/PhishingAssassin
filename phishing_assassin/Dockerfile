@@ -1,5 +1,7 @@
 #####    PhishingAssassin Dockerfile    #####
 
+
+
 ## --- Import origin image --- ##
 FROM debian:9
 
@@ -37,8 +39,14 @@ COPY ./plugins/AntiPhishing.pm /etc/mail/spamassassin
 # Load Anti-Phishing Plugins
 COPY ./plugin_load/antiphishing.pre /etc/mail/spamassassin
 
+
 ## --- Open port --- ##
 EXPOSE 783/tcp
 
+
+## --- Allowed Client IPs defined by User during building stage in command line--- ##
+ARG ALLOWED_CLIENT_IPS
+
+
 ## --- Execute on start --- ##
-ENTRYPOINT spamd --listen-ip=0.0.0.0 --port=783 --allowed-ips=CLIENT_IP --debug
+ENTRYPOINT spamd --listen-ip=0.0.0.0 --port=783 --allowed-ips=$ALLOWED_CLIENT_IPS --debug
