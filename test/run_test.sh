@@ -1,7 +1,8 @@
 #!/bin/bash
 
 # Analysis Server Configuration
-SERVER=YOUR_ANALYSIS_SERVER_IP
+SERVER=<your_analysis_server_IP>
+
 
 # Code executed by each test request, that ends writing its own result into a csv file line
 function test_request {

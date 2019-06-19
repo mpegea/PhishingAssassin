@@ -44,9 +44,5 @@ COPY ./plugin_load/antiphishing.pre /etc/mail/spamassassin
 EXPOSE 783/tcp
 
 
-## --- Allowed Client IPs defined by User during building stage in command line--- ##
-ARG ALLOWED_CLIENT_IPS
-
-
 ## --- Execute on start --- ##
-ENTRYPOINT spamd --listen-ip=0.0.0.0 --port=783 --allowed-ips=$ALLOWED_CLIENT_IPS --debug
+ENTRYPOINT spamd --listen-ip=0.0.0.0 --port=783 --allowed-ips=<your_allowed_client_IPs> --debug

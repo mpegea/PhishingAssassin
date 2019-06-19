@@ -49,6 +49,7 @@ Rules -> `./phishing_assassin/rules/`
 ```
 Modify the value of the SERVER variable in ./test/run_test.sh
 ``` 
+> _Single-Host Deployment ->_ SERVER=10.0.0.10
 
 
 
@@ -56,10 +57,13 @@ Modify the value of the SERVER variable in ./test/run_test.sh
 
 ### PhishingAssassin 
 ```
-docker image build --build-arg ALLOWED_CLIENT_IPS=<your_client_IPs> --tag phishing_assassin ./phishing_assassin/
+docker image build --tag phishing_assassin ./phishing_assassin/
 ```
->_Note: You must configure the ALLOWED_CLIENT_IPS argument according to Spamd configuration._<br/>
+>_Note: You must configure the allowed-ips argument in the entrypoint of phishing_assassin dockerfile, according to Spamd configuration._<br/>
 https://spamassassin.apache.org/full/3.2.x/doc/spamd.html
+
+>_Single-Host Deployment ->_ allowed-ips=10.0.0.5<br/>
+
 
 ### Test
 ```
@@ -79,7 +83,7 @@ docker network create --subnet=10.0.0.0/24 phishing_test_network
 docker container run \
     --name phishing_assassin \
     --hostname phishing_assassin \
-    --network test_network \
+    --network phishing_test_network \
     --ip 10.0.0.10 \
     phishing_assassin
 ```    
@@ -88,7 +92,7 @@ docker container run \
 docker container run \
     --name test \
     --hostname test \
-    --network test_network \
+    --network phishing_test_network \
     --ip 10.0.0.5 \
     --mount type=bind,source="$(pwd)"/test/dataset,target=/root/dataset,readonly \
     --mount type=bind,source="$(pwd)"/test/run_test.sh,target=/root/run_test.sh \
@@ -150,7 +154,7 @@ iptables -A INPUT -p tcp --dport 7946 -j ACCEPT
 iptables -A INPUT -p udp --dport 7946 -j ACCEPT
 iptables -A INPUT -p udp --dport 4789 -j ACCEPT
 netfilter-persistent save
-sudo systemctl restart docker
+systemctl restart docker
 ```
 
 ### Initialize the Swarm mode in the Manager Node
@@ -195,7 +199,7 @@ docker container rm -f phishing_assassin test
 docker image rm -f phishing_assassin test
 ```
 ```
-docker network rm test_network
+docker network rm phishing_test_network
 ```
 >_Note: The past command is only necessary in a Single-Host Deployment._
 ```
